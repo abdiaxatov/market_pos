@@ -1,0 +1,116 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+:root {
+    --background: 119 40% 98%;
+    --foreground: 119 100% 10%;
+    --card: 119 40% 98%;
+    --card-foreground: 119 100% 10%;
+    --popover: 119 40% 98%;
+    --popover-foreground: 119 100% 10%;
+    --primary: 119 100% 30%; /* #029900 */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 119 60% 85%;
+    --secondary-foreground: 119 100% 20%;
+    --muted: 119 40% 90%;
+    --muted-foreground: 119 100% 25%;
+    --accent: 119 50% 80%;
+    --accent-foreground: 119 100% 25%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 119 30% 70%;
+    --input: 119 30% 85%;
+    --ring: 119 100% 30%;
+    --chart-1: 119 80% 40%;
+    --chart-2: 119 60% 30%;
+    --chart-3: 119 40% 20%;
+    --chart-4: 119 70% 60%;
+    --chart-5: 119 80% 50%;
+    --radius: 0.5rem;
+    --sidebar-background: 119 30% 98%;
+    --sidebar-foreground: 119 100% 20%;
+    --sidebar-primary: 119 100% 30%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 119 40% 90%;
+    --sidebar-accent-foreground: 119 100% 25%;
+    --sidebar-border: 119 30% 70%;
+    --sidebar-ring: 119 100% 30%;
+  }
+
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 25 95% 53%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 25 95% 53%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+.animate-slide-up {
+  animation: slideUp 0.5s ease-out;
+}
+.animate-pulse-slow {
+  animation: pulse 2s infinite;
+}
+body::-webkit-scrollbar {
+  width: 0px;
+}

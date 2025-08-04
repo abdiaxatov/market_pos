@@ -418,12 +418,29 @@ export function StatsPage() {
 
   // Helper function to get category name for an item
   const getCategoryForItem = (itemName: string): string => {
-    const menuItem = menuItems.find((item) => item.name === itemName)
+    // Try exact match first
+    let menuItem = menuItems.find((item) => item.name === itemName)
+    
+    // If no exact match, try case-insensitive match
+    if (!menuItem) {
+      menuItem = menuItems.find((item) => 
+        item.name.toLowerCase() === itemName.toLowerCase()
+      )
+    }
+    
+    // If still no match, try partial match
+    if (!menuItem) {
+      menuItem = menuItems.find((item) => 
+        item.name.toLowerCase().includes(itemName.toLowerCase()) ||
+        itemName.toLowerCase().includes(item.name.toLowerCase())
+      )
+    }
+    
     if (menuItem && menuItem.category) {
       const category = categories.find((cat) => cat.id === menuItem.category)
-      return category ? category.name : "Noma'lum kategoriya"
+      return category ? category.name : "Boshqa"
     }
-    return "Noma'lum kategoriya"
+    return "Boshqa"
   }
 
   // Fetch stats based on selected time range

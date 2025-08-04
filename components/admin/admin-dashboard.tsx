@@ -1493,7 +1493,7 @@ export function AdminDashboard() {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div className="flex items-center gap-4">
           <div className="relative w-12 h-12">
-            <Image src="/logo.svg" alt="Restaurant Logo" width={48} height={48} className="object-contain" />
+            <Image src="/logo.png" alt="Restaurant Logo" width={48} height={48} className="object-contain" />
           </div>
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Admin Dashboard</h1>

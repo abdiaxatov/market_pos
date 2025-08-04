@@ -117,17 +117,23 @@ export function CartPage() {
       setIsCheckingActiveOrder(true)
       try {
         // Check for active orders (not paid or cancelled)
+        // First, get all orders for this phone and device
         const activeOrderQuery = query(
           collection(db, "orders"),
           where("phoneNumber", "==", phoneNumber),
           where("deviceId", "==", deviceId),
-          where("status", "not-in", ["paid", "cancelled"]),
         )
 
         const activeOrderSnapshot = await getDocs(activeOrderQuery)
+        
+        // Filter out paid and cancelled orders on the client side
+        const activeOrders = activeOrderSnapshot.docs.filter(doc => {
+          const data = doc.data()
+          return data.status !== "paid" && data.status !== "cancelled"
+        })
 
-        if (!activeOrderSnapshot.empty) {
-          const orderDoc = activeOrderSnapshot.docs[0]
+        if (activeOrders.length > 0) {
+          const orderDoc = activeOrders[0]
           const orderData = orderDoc.data()
 
           setActiveOrder({

@@ -46,6 +46,11 @@ export function playNotificationSound(): void {
   playSound("notification")
 }
 
+// Play delivery notification sound
+export function playDeliverySound(): void {
+  playSound("delivery")
+}
+
 // Simple audio player utility class
 class AudioPlayer {
   private static audioCache: Record<string, HTMLAudioElement> = {}

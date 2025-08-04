@@ -86,7 +86,7 @@ import { generateReceiptHTML } from "@/lib/receipt-utils"
 import type { Order, MenuItem, Category } from "@/types"
 import { isSameDay, subDays } from "date-fns"
 import Image from "next/image"
-import { playNotificationSound } from "@/lib/audio-player"
+import { playNotificationSound, playDeliverySound } from "@/lib/audio-player"
 
 // Electron API uchun global interfeys deklaratsiyasi
 declare global {
@@ -354,11 +354,27 @@ export function AdminDashboard() {
         )
 
         if (newOrders.length > 0 && previousOrderIds.length > 0) {
-          playNotificationSound()
-          toast({
-            title: "🔔 Yangi buyurtma!",
-            description: `${newOrders.length} ta yangi buyurtma keldi`,
-          })
+          // Check if any new orders are delivery orders
+          const deliveryOrders = newOrders.filter((order) => order.orderType === "delivery")
+          const otherOrders = newOrders.filter((order) => order.orderType !== "delivery")
+          
+          // Play delivery sound if there are delivery orders
+          if (deliveryOrders.length > 0) {
+            playDeliverySound()
+            toast({
+              title: "🚚 Yangi yetkazib berish buyurtmasi!",
+              description: `${deliveryOrders.length} ta yangi yetkazib berish buyurtmasi keldi`,
+            })
+          }
+          
+          // Play regular notification sound for other orders
+          if (otherOrders.length > 0) {
+            playNotificationSound()
+            toast({
+              title: "🔔 Yangi buyurtma!",
+              description: `${otherOrders.length} ta yangi buyurtma keldi`,
+            })
+          }
         }
 
         previousOrderIdsRef.current = currentOrderIds

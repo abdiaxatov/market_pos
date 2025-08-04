@@ -21,7 +21,7 @@ import {
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { OrderDetails } from "@/components/admin/order-details"
 import { formatCurrency } from "@/lib/utils"
-import { playNotificationSound } from "@/lib/audio-player"
+import { playNotificationSound, playDeliverySound } from "@/lib/audio-player"
 import { Clock, CheckCircle, ChefHat, Utensils, Trash2, User } from "lucide-react"
 import { getWaiterNameById } from "@/lib/table-service"
 
@@ -87,7 +87,12 @@ export function OrderList() {
 
         // Play sound only if the order is less than 10 seconds old
         if (timeDifference < 10000) {
-          playNotificationSound()
+          // Check if it's a delivery order
+          if (latestOrder.orderType === "delivery") {
+            playDeliverySound()
+          } else {
+            playNotificationSound()
+          }
         }
       }
 

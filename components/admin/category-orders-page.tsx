@@ -13,6 +13,7 @@ import { formatCurrency } from "@/lib/utils"
 import { useToast } from "@/components/ui/use-toast"
 import { Switch } from "@/components/ui/switch"
 import { format } from "date-fns"
+import { playNotificationSound, playDeliverySound } from "@/lib/audio-player"
 
 // Category interface
 interface Category {
@@ -154,10 +155,12 @@ export default function CategoryOrdersPage() {
   const [lastOrderId, setLastOrderId] = useState<string | null>(null)
   const [hasUserInteracted, setHasUserInteracted] = useState(false)
   const notificationAudioRef = useRef<HTMLAudioElement | null>(null)
+  const deliveryAudioRef = useRef<HTMLAudioElement | null>(null)
 
-  // Initialize audio element
+  // Initialize audio elements
   useEffect(() => {
     notificationAudioRef.current = new Audio("/notification.mp3")
+    deliveryAudioRef.current = new Audio("/delivery.mp3")
 
     const handleUserInteraction = () => {
       setHasUserInteracted(true)
@@ -265,25 +268,53 @@ export default function CategoryOrdersPage() {
           if (newestOrderId && lastOrderId && newestOrderId !== lastOrderId) {
             newOrderDetected = true
 
-            // Play notification sound
-            if (soundEnabled && hasUserInteracted && notificationAudioRef.current) {
-              try {
-                const playPromise = notificationAudioRef.current.play()
-                if (playPromise !== undefined) {
-                  playPromise.catch((error) => {
-                    console.log("Audio playback prevented:", error)
-                  })
+            // Find the newest order to check its type
+            const newestOrder = ordersList.find(order => order.id === newestOrderId)
+            
+            if (newestOrder) {
+              // Check if it's a delivery order
+              if (newestOrder.orderType === "delivery") {
+                // Play delivery sound
+                if (soundEnabled && hasUserInteracted && deliveryAudioRef.current) {
+                  try {
+                    const playPromise = deliveryAudioRef.current.play()
+                    if (playPromise !== undefined) {
+                      playPromise.catch((error) => {
+                        console.log("Audio playback prevented:", error)
+                      })
+                    }
+                  } catch (error) {
+                    console.error("Error playing delivery sound:", error)
+                  }
                 }
-              } catch (error) {
-                console.error("Error playing notification sound:", error)
+
+                toast({
+                  title: "🚚 Yangi yetkazib berish buyurtmasi!",
+                  description: "Yangi yetkazib berish buyurtmasi qabul qilindi",
+                  variant: "default",
+                })
+              } else {
+                // Play regular notification sound for non-delivery orders
+                if (soundEnabled && hasUserInteracted && notificationAudioRef.current) {
+                  try {
+                    const playPromise = notificationAudioRef.current.play()
+                    if (playPromise !== undefined) {
+                      playPromise.catch((error) => {
+                        console.log("Audio playback prevented:", error)
+                      })
+                    }
+                  } catch (error) {
+                    console.error("Error playing notification sound:", error)
+                  }
+                }
+
+                toast({
+                  title: "🔔 Yangi buyurtma!",
+                  description: "Yangi buyurtma qabul qilindi",
+                  variant: "default",
+                })
               }
             }
-
-            toast({
-              title: "🔔 Yangi buyurtma!",
-              description: "Yangi buyurtma qabul qilindi",
-              variant: "default",
-            })
           }
 
           if (newestOrderId) {
